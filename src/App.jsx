@@ -21,13 +21,11 @@ function App() {
           <Route path="/about" element={<About />} />
 
           <Route path="/pokemons" element={<Pokemons />} />
-
+          
           <Route path="/pokemons/:name" element={<Details />}>
-            <Route path=":id/abilities" element={<Abilities />} />
-
-            <Route path=":id/dimensions" element={<Dimensions />} />
-
-            <Route path=":id/stats" element={<Stats />} />
+            <Route path="abilities" element={<Abilities />} />
+            <Route path="dimensions" element={<Dimensions />} />
+            <Route path="stats" element={<Stats />} />
           </Route>
         </Route>
       </Routes>
