@@ -50,7 +50,7 @@ const Pokemons = () => {
   }, []);
 
   useEffect(() => {
-    setSearchParams(query ? { [NAME_PARAM]: query } : searchParams);
+    setSearchParams(query ? { [NAME_PARAM]: query } : {});
   }, [query]);
 
   const displayedPokemons = pokemons && searchQuery && searchQuery
