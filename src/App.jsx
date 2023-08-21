@@ -10,12 +10,14 @@ import Stats from "./components/Stats";
 import Dimensions from "./components/Dimensions";
 
 import "./App.css";
+import NotFound404 from "./components/404";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
+          <Route path="*" element={<NotFound404 />} />
           <Route path="/" element={<Home />} />
 
           <Route path="/about" element={<About />} />

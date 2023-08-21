@@ -8,8 +8,9 @@ import {
 } from "react-router-dom";
 
 const Details = () => {
-  const [details, setDetails] = useState();
+  const [details, setDetails] = React.useState();
   const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const params = useParams();
   const location = useLocation();
 
@@ -21,9 +22,11 @@ const Details = () => {
       );
       const data = await res.json();
       setDetails(data);
-      setLoading(false);
     } catch (err) {
+      setError(true)
       console.error(err);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -36,7 +39,15 @@ const Details = () => {
     ? "../../?" + urlSearchParams.toString()
     : "../..";
 
-  return (
+    // const persistedLocation = location.state?.searchParams.toString()
+    // ? "../../?" + location.state?.searchParams.toString()
+    // : "../..";
+
+    if(error) {
+      return <h1>There was an error to fetch the requested data.</h1>
+    }
+
+    return (
     <div className="pt-8">
       <div className="text-left">
         <Link

@@ -32,16 +32,22 @@ const SearchBar = ({ query, onQueryChange, onClear }) => {
 const Pokemons = () => {
   const [pokemons, setPokemons] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const searchQuery = searchParams.get(NAME_PARAM);
   const [query, setQuery] = useState(searchQuery || "");
 
   const getPokemons = async () => {
+    setLoading(true)
     try {
       const res = await fetch(BASE_URL);
       const data = await res.json();
       setPokemons(data.results);
     } catch (err) {
+      setError(true)
       console.error(err);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -56,6 +62,14 @@ const Pokemons = () => {
   const displayedPokemons = pokemons && searchQuery && searchQuery
     ? pokemons.filter((pokemon) => pokemon?.name.includes(searchQuery.toLowerCase()))
     : pokemons;
+
+  if (loading) {
+    return <h1>Loading....</h1>
+  }
+
+  if (error) {
+    return <h1>An error occured</h1>
+  }
 
   return (
     <div className='py-8'>
