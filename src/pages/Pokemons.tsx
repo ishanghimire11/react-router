@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useLoaderData } from 'react-router-dom';
+import { getPokemons } from './hooks/usePokemons';
 
-const BASE_URL = "https://pokeapi.co/api/v2/pokemon?limit=20&offset=0";
 const NAME_PARAM = "name";
 const PLACEHOLDER_TEXT = "Search for Pokémon names";
+
+export const loader = () => {
+  return getPokemons();
+};
 
 const SearchBar = ({ query, onQueryChange, onClear }) => {
   return (
@@ -30,30 +34,11 @@ const SearchBar = ({ query, onQueryChange, onClear }) => {
 };
 
 const Pokemons = () => {
-  const [pokemons, setPokemons] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
   const searchQuery = searchParams.get(NAME_PARAM);
   const [query, setQuery] = useState(searchQuery || "");
-
-  const getPokemons = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch(BASE_URL);
-      const data = await res.json();
-      setPokemons(data.results);
-    } catch (err) {
-      setError(true)
-      console.error(err);
-    } finally {
-      setLoading(false)
-    }
-  };
-
-  useEffect(() => {
-    getPokemons();
-  }, []);
+  
+  const pokemons = useLoaderData();
 
   useEffect(() => {
     setSearchParams(query ? { [NAME_PARAM]: query } : {});
@@ -62,14 +47,6 @@ const Pokemons = () => {
   const displayedPokemons = pokemons && searchQuery && searchQuery
     ? pokemons.filter((pokemon) => pokemon?.name.includes(searchQuery.toLowerCase()))
     : pokemons;
-
-  if (loading) {
-    return <h1>Loading....</h1>
-  }
-
-  if (error) {
-    return <h1>An error occured</h1>
-  }
 
   return (
     <div className='py-8'>
@@ -80,6 +57,7 @@ const Pokemons = () => {
           setQuery("");
         }}
       />
+      
       <div className='grid grid-cols-3 gap-16 mt-16'>
         {displayedPokemons.map((pokemon) => (
           <Link key={pokemon.name} to={`${pokemon.name}/abilities`} state={{searchParams: searchParams.toString()}}>
