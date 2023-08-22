@@ -7,7 +7,7 @@ import {
 
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Pokemons from "./pages/Pokemons";
+import Pokemons, { loader as PokemonsLoader }  from "./pages/Pokemons";
 import Details from "./pages/Details";
 import Layout from "./components/Layout";
 import Abilities from "./components/Abilities";
@@ -16,6 +16,7 @@ import Dimensions from "./components/Dimensions";
 import NotFound404 from "./components/404";
 
 import "./App.css";
+import Error from "./components/Error";
 
 function App() {
   const router = createBrowserRouter(
@@ -24,7 +25,7 @@ function App() {
         <Route path="*" element={<NotFound404 />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/pokemons" element={<Pokemons />} />
+        <Route path="/pokemons" element={<Pokemons />} loader={PokemonsLoader} errorElement={<Error />}/>
         
         <Route path="/pokemons/:name" element={<Details />}>
           <Route path="abilities" element={<Abilities />} />
